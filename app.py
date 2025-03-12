@@ -1,7 +1,7 @@
 from flask import Flask, request, current_app, send_from_directory
 from datetime import datetime
 import os 
-from db import init_db
+from db import get_db_connection, init_db
 
 app = Flask(__name__)
 
@@ -22,11 +22,38 @@ def get_room(room):
 
 
 @app.route('/api/chat/<room>' , methods=['GET'])
-def get_room_chat(room): 
-        if not (os.path.isfile(f'rooms/{room}')):
-            return 'This is a new room, send the first message!'
-        else :
-            return send_from_directory("rooms", f"{room}")
+def get_room_chat(room):
+    # Connect to database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Ensure room exists (create if not)
+    cursor.execute("INSERT IGNORE INTO rooms (name) VALUES (%s)", (room,))
+    conn.commit()
+
+    # Get messages for room
+    cursor.execute("""
+        SELECT timestamp, username, message
+        FROM messages 
+        WHERE room_name = %s 
+        ORDER BY timestamp
+        """, (room,))
+
+    messages = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    
+    # If no messages found, return new room message
+    if not messages:
+        return 'This is a new room, send the first message!'
+
+    # Format messages as required
+    formatted_messages = []
+    for timestamp, username, message in messages:
+        formatted_time = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        formatted_messages.append(f'[{formatted_time}] {username}: {message}')
+    
+    return '\n'.join(formatted_messages)
 
 
 @app.route('/api/chat/<room>' , methods=['POST'])
@@ -35,11 +62,26 @@ def add_message(room):
 
      username = message_data['username']
      message = message_data['msg']
-     current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-     with open(f'rooms/{room}', 'a') as room_file:
-        room_file.write(f'[{current_datetime}] {username}: {message}\n')
 
-     return ' '
+      
+    # Connect to database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Ensure room exists
+    cursor.execute("INSERT IGNORE INTO rooms (name) VALUES (%s)", (room,))
+
+    # Insert message
+    cursor.execute("""
+        INSERT INTO messages (room_name, username, message)
+        VALUES (%s, %s, %s)
+    """, (room, username, message))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return '', 201
 
 
 if __name__ == '__main__':
