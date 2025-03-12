@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: chat-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: chatapp
+      MYSQL_USER: chatuser
+      MYSQL_PASSWORD: chatpass
+    networks:
+      - chat-network
+
+  flask:
+    image: chatty  
+    container_name: chatty
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: chat-mysql
+    ports:
+      - "5001:5000"
+    networks:
+      - chat-network
+
+networks:
+  chat-network:
