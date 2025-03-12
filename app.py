@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 # Initialize the database when the app starts
-@app.before_first_request
+@app.before_request
 def initialize():
     init_db()
 
@@ -26,7 +26,7 @@ def get_room_chat(room):
     # Connect to database
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    
     # Ensure room exists (create if not)
     cursor.execute("INSERT IGNORE INTO rooms (name) VALUES (%s)", (room,))
     conn.commit()
@@ -58,19 +58,16 @@ def get_room_chat(room):
 
 @app.route('/api/chat/<room>' , methods=['POST'])
 def add_message(room):
-     message_data = request.form.to_dict()
-
-     username = message_data['username']
-     message = message_data['msg']
-
-      
+    message_data = request.form.to_dict()
+    username = message_data['username']
+    message = message_data['msg']
+    
     # Connect to database
     conn = get_db_connection()
     cursor = conn.cursor()
     
     # Ensure room exists
     cursor.execute("INSERT IGNORE INTO rooms (name) VALUES (%s)", (room,))
-
     # Insert message
     cursor.execute("""
         INSERT INTO messages (room_name, username, message)
@@ -80,7 +77,6 @@ def add_message(room):
     conn.commit()
     cursor.close()
     conn.close()
-
     return '', 201
 
 
