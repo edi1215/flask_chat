@@ -7,7 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
 COPY static/ ./static/
+RUN mkdir rooms
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["python3", "/app/app.py"]
