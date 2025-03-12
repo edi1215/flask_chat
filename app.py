@@ -16,7 +16,10 @@ def get_room(room):
 
 @app.route('/api/chat/<room>' , methods=['GET'])
 def get_room_chat(room): 
-        return send_from_directory("rooms", f"{room}")
+        if not (os.path.isfile(f'rooms/{room}')):
+            return 'This is a new room, send the first message!'
+        else :
+            return send_from_directory("rooms", f"{room}")
 
 
 @app.route('/api/chat/<room>' , methods=['POST'])
