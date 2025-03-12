@@ -6,8 +6,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
+COPY db.py .
 COPY static/ ./static/
-RUN mkdir rooms
 
 EXPOSE 5000
 

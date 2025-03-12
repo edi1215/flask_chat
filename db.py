@@ -7,7 +7,7 @@ def get_db_connection():
     for _ in range(10):
         try:
             conn = mysql.connector.connect(
-                host="localhost",  # Use host.docker.internal if running Flask in Docker
+                host="chat-mysql",
                 user="chatuser",
                 password="chatpass",
                 database="chatapp"
