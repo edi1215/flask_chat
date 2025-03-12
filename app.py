@@ -17,5 +17,10 @@ def get_room_chat(room):
         return send_from_directory("rooms", f"{room}")
 
 
+@app.route('/api/chat/<room>' , methods=['POST'])
+def add_message(room):
+     return
+
+
 if __name__ == '__main__':
     app.run(debug=True)
