@@ -5,22 +5,22 @@ from db import get_db_connection, init_db
 
 app = Flask(__name__)
 
-
 # Initialize the database when the app starts
 @app.before_request
 def initialize():
     init_db()
 
+# Eddy
 @app.route('/', methods=['GET'])
 def index():
     return current_app.send_static_file('index.html')
 
-
+# Tal
 @app.route('/<room>', methods=['GET'])
 def get_room(room):
     return current_app.send_static_file("index.html")
 
-
+# Tal + Eddy
 @app.route('/api/chat/<room>' , methods=['GET'])
 def get_room_chat(room):
     # Connect to database
@@ -56,6 +56,7 @@ def get_room_chat(room):
     return '\n'.join(formatted_messages)
 
 
+# Tal + Eddy
 @app.route('/api/chat/<room>' , methods=['POST'])
 def add_message(room):
     message_data = request.form.to_dict()

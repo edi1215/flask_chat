@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+# Tal
   mysql:
     image: mysql:8.0
     container_name: chat-mysql
@@ -12,7 +13,7 @@ services:
       MYSQL_PASSWORD: chatpass
     networks:
       - chat-network
-
+# Eddy
   flask:
     image: chatty  
     container_name: chatty

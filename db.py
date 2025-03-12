@@ -1,6 +1,7 @@
 import mysql.connector
 import time
 
+# Tal + Eddy
 def get_db_connection():
     """Create a connection to the MySQL database"""
     # Try to connect multiple times (useful when starting up)
