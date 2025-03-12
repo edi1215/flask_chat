@@ -1,4 +1,5 @@
 from flask import Flask, request, current_app, send_from_directory
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -19,7 +20,14 @@ def get_room_chat(room):
 
 @app.route('/api/chat/<room>' , methods=['POST'])
 def add_message(room):
-     return
+     message_data = request.form.to_dict()
+
+     username = message_data['username']
+     message = message_data['msg']
+     current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+     with open(f'rooms/{room}', 'a') as room_file:
+     return ' '
 
 
 if __name__ == '__main__':
