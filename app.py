@@ -12,9 +12,9 @@ def get_room(room):
     return current_app.send_static_file("index.html")
 
 
-@app.route('/api/chat/<room>')
+@app.route('/api/chat/<room>' , methods=['GET'])
 def get_room_chat(room): 
-        return send_from_directory("mock/rooms", f"{room}")
+        return send_from_directory("rooms", f"{room}")
 
 
 if __name__ == '__main__':
