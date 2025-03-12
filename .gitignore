@@ -8,3 +8,6 @@ __pycache__/
 
 # tmp files
 *.swp
+
+# rooms
+./rooms/*
