@@ -8,8 +8,13 @@ def index():
 
 
 @app.route('/<room>', methods=['GET'])
-def getroom(room):
+def get_room(room):
     return current_app.send_static_file("index.html")
+
+
+@app.route('/api/chat/<room>')
+def get_room_chat(room): 
+        return 
 
 
 if __name__ == '__main__':
