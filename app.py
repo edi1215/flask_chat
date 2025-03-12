@@ -25,8 +25,9 @@ def add_message(room):
      username = message_data['username']
      message = message_data['msg']
      current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
      with open(f'rooms/{room}', 'a') as room_file:
+        room_file.write(f'[{current_datetime}] {username}: {message}\n')
+
      return ' '
 
 
