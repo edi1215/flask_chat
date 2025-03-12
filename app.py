@@ -1,8 +1,15 @@
 from flask import Flask, request, current_app, send_from_directory
 from datetime import datetime
 import os 
+from db import init_db
 
 app = Flask(__name__)
+
+
+# Initialize the database when the app starts
+@app.before_first_request
+def initialize():
+    init_db()
 
 @app.route('/', methods=['GET'])
 def index():
